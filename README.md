@@ -74,7 +74,7 @@ Before you begin, ensure you have the following installed:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/goshope.git
+git clone https://github.com/SR22kl/GoShope.git
 cd goshope
 ```
 
@@ -365,10 +365,6 @@ npm start
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## 🙏 Acknowledgments
 
 - [React Documentation](https://reactjs.org/docs/)
@@ -376,6 +372,14 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [MongoDB Documentation](https://docs.mongodb.com/)
 - [Tailwind CSS Documentation](https://tailwindcss.com/docs)
 - [Framer Motion Documentation](https://www.framer.com/docs/)
+
+## 📝 License
+
+This project is licensed under the ISC License - see the package.json file for details.
+
+## 👨‍💻 Author
+
+- Sumit Rathod - [GitHub](https://github.com/SR22kl)
 
 ## 📞 Support
 
