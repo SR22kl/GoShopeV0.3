@@ -2,7 +2,7 @@
 
 A modern, feature-rich e-commerce platform built with React, TypeScript, Node.js, Express, and MongoDB. Features include user authentication, product management, shopping cart, payment processing, admin dashboard, and more.
 
-![GoShope Banner](https://via.placeholder.com/800x200/4F46E5/FFFFFF?text=GoShope+E-Commerce)
+![GoShope Banner](./preview/prev1.png)
 
 ## ✨ Features
 
