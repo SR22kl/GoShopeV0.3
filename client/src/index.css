@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+body {
+  user-select: none;
+}
