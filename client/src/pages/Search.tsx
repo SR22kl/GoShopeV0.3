@@ -222,7 +222,7 @@ const Search = () => {
                 className="backdrop-blur-lg bg-white/80 border border-white/20 shadow-2xl rounded-2xl p-6"
               >
                 <div className="flex justify-start gap-4 items-start flex-wrap">
-                  {searchedData?.products.map((i, index) => (
+                  {searchedData?.products.map((i, _) => (
                     <motion.div
                       key={i._id}
                       variants={itemVariants}
