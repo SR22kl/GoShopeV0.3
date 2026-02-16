@@ -4,7 +4,7 @@ import {
   CreateReviewRequest,
   MessageResponse,
   ReviewsResponse,
-} from "../types/apiTypes";
+} from "../../types/apiTypes";
 
 export const reviewApi = createApi({
   reducerPath: "reviewApi",
