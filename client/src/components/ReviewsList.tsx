@@ -82,7 +82,7 @@ const ReviewsList = ({ productId }: ReviewsListProps) => {
           <div className="flex gap-2">
             <button
               onClick={() => setSortBy("latest")}
-              className={`px-4 py-2 rounded-md md:text-sm text-xs font-medium transition-colors ${
+              className={`md:px-4 md:py-2 px-2 py-1 rounded-md md:text-sm text-xs font-medium transition-colors ${
                 sortBy === "latest"
                   ? "bg-purple-600 text-white"
                   : "bg-gray-200 text-gray-700 hover:bg-gray-200"
@@ -92,7 +92,7 @@ const ReviewsList = ({ productId }: ReviewsListProps) => {
             </button>
             <button
               onClick={() => setSortBy("top")}
-              className={`px-4 py-2 rounded-md md:text-sm text-xs font-medium transition-colors ${
+              className={`md:px-4 md:py-2 px-2 py-1 rounded-md md:text-sm text-xs font-medium transition-colors ${
                 sortBy === "top"
                   ? "bg-purple-600 text-white"
                   : "bg-gray-200 text-gray-700 hover:bg-gray-200"
@@ -121,7 +121,7 @@ const ReviewsList = ({ productId }: ReviewsListProps) => {
             >
               {/* User Info and Rating */}
               <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center md:gap-3 gap-1">
                   <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
                     {review.user.avatar ? (
                       <img
@@ -134,7 +134,7 @@ const ReviewsList = ({ productId }: ReviewsListProps) => {
                     )}
                   </div>
                   <div>
-                    <p className="font-medium md:text-md text-sm text-gray-900">
+                    <p className="font-medium md:text-md text-xs truncate text-gray-900">
                       {review.user.name}
                     </p>
                     <p className="md:text-sm text-xs text-gray-500">
@@ -142,7 +142,7 @@ const ReviewsList = ({ productId }: ReviewsListProps) => {
                     </p>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center md:gap-2 gap-1 ">
                   {renderStars(review.rating)}
                   <span className="md:text-sm text-xs font-medium text-gray-700">
                     {review.rating}/5
