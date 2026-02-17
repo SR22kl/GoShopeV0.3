@@ -46,7 +46,7 @@ const Header = ({ user }: PropsType) => {
         </Link>
 
         {/* NAV LINKS */}
-        <div className="flex items-center gap-6 text-gray-700 font-medium">
+        <div className="flex items-center md:gap-6 gap-1 text-gray-700 font-medium">
           <Link
             onClick={() => setIsOpen(false)}
             to="/"
