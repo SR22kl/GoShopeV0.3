@@ -40,7 +40,7 @@ const ImageViewer = ({ photos, productName }: ImageViewerProps) => {
       <div className="flex flex-col gap-4">
         {/* Large Image Display */}
         <div
-          className="relative rounded-lg overflow-hidden h-[500px] flex items-center justify-center cursor-pointer group"
+          className="relative rounded-lg overflow-hidden md:h-[500px] h-[350px] flex items-center justify-center cursor-pointer group"
           onClick={() => setIsFullscreen(true)}
         >
           <img
