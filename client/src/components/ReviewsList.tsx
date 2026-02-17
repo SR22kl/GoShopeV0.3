@@ -74,7 +74,7 @@ const ReviewsList = ({ productId }: ReviewsListProps) => {
     <div className="space-y-6">
       {/* Header with Filter */}
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-gray-900">
+        <h3 className="md:text-lg text-sm font-semibold text-gray-900">
           Customer Reviews ({totalReviews})
         </h3>
 
@@ -82,20 +82,20 @@ const ReviewsList = ({ productId }: ReviewsListProps) => {
           <div className="flex gap-2">
             <button
               onClick={() => setSortBy("latest")}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+              className={`px-4 py-2 rounded-md md:text-sm text-xs font-medium transition-colors ${
                 sortBy === "latest"
                   ? "bg-purple-600 text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  : "bg-gray-200 text-gray-700 hover:bg-gray-200"
               }`}
             >
               Latest
             </button>
             <button
               onClick={() => setSortBy("top")}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+              className={`px-4 py-2 rounded-md md:text-sm text-xs font-medium transition-colors ${
                 sortBy === "top"
                   ? "bg-purple-600 text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  : "bg-gray-200 text-gray-700 hover:bg-gray-200"
               }`}
             >
               Top Rated
@@ -134,24 +134,24 @@ const ReviewsList = ({ productId }: ReviewsListProps) => {
                     )}
                   </div>
                   <div>
-                    <p className="font-medium text-gray-900">
+                    <p className="font-medium md:text-md text-sm text-gray-900">
                       {review.user.name}
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p className="md:text-sm text-xs text-gray-500">
                       {formatDate(review.createdAt)}
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
                   {renderStars(review.rating)}
-                  <span className="text-sm font-medium text-gray-700">
+                  <span className="md:text-sm text-xs font-medium text-gray-700">
                     {review.rating}/5
                   </span>
                 </div>
               </div>
 
               {/* Review Comment */}
-              <p className="text-gray-700 leading-relaxed">{review.comment}</p>
+              <p className="text-gray-700 leading-relaxed md:text-sm text-xs">{review.comment}</p>
             </div>
           ))}
         </div>
