@@ -6,6 +6,7 @@ import { auth } from "../firebase";
 import { useLoginMutation } from "../redux/api/userApi";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
 import { MessageResponse } from "../types/apiTypes";
+import { motion } from "framer-motion";
 
 const Login = () => {
   const [gender, setGender] = useState("");
@@ -17,17 +18,6 @@ const Login = () => {
     try {
       const provider = new GoogleAuthProvider();
       const { user } = await signInWithPopup(auth, provider);
-      // console.log(user);
-
-      // console.log({
-      //   name: user.displayName!,
-      //   email: user.email!,
-      //   photo: user.photoURL!,
-      //   gender,
-      //   role: "user",
-      //   dob: date,
-      //   _id: user.uid,
-      // });
 
       const res = await login({
         name: user.displayName!,
@@ -46,54 +36,82 @@ const Login = () => {
         const message = (error.data as MessageResponse).message;
         toast.error(message);
       }
-    } catch (error) {
-      console.log("SignIn Failed");
+    } catch {
       toast.error("SignIn Failed");
     }
   };
-  // console.log(gender);
+
   return (
-    <>
-      <div className="flex flex-col h-[90vh] " id="login">
-        <main className="flex flex-col justify-center items-stretch gap-[1rem] max-w-[400px] w-full h-[80%] mx-auto mt-[60px] p-[3rem] border-1 border-gray-200 shadow-md rounded-lg">
-          <h1 className="uppercase text-2xl font-semibold mb-[40px] text-center ">
-            Login
-          </h1>
-          <div className="flex flex-col gap-[0.1rem] w-full">
-            <label className="text-md">Gender</label>
-            <select
-              className="p-[10px] border-1 border-gray-200 shadow-md rounded outline-none cursor-pointer font-serif"
-              value={gender}
-              onChange={(e) => setGender(e.target.value)}
-            >
-              <option value="">Select Gender</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
-          <div className="flex flex-col gap-[0.1rem] w-full">
-            <label>Date of Birth</label>
-            <input
-              className="p-[10px] border-1 border-gray-200 shadow-md rounded outline-none cursor-pointer"
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-            />
-          </div>
-          <div className="flex flex-col justify-start items-stretch gap-[0.5rem] mt-[50px] w-full ">
-            <p className="text-center">Already Signed In?</p>
-            <button
-              className="flex w-[70%] m-auto h-[3rem] gap-1 items-center text-[1rem] border-1 border-[rgb(62,125,242)] bg-[rgb(62,125,242)] text-white shadow-md rounded outline-none cursor-pointer duration-300 hover:scale-[1.05] ease-in-out"
-              onClick={logInHandler}
-            >
-              <FcGoogle className="bg-white h-full w-[30%] rounded" />{" "}
-              <span className="w-full">Sign in with Google</span>
-            </button>
-          </div>
-        </main>
-      </div>
-    </>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4">
+      {/* Floating animated card */}
+      <motion.main
+        initial={{ opacity: 0, y: 80, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="w-full max-w-md backdrop-blur-xl bg-white/20 border border-white/30 shadow-2xl rounded-2xl p-8"
+      >
+        {/* Title */}
+        <motion.h1
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="text-3xl font-bold text-center text-gray-700 mb-8 tracking-wide"
+        >
+          Welcome Back 👋
+        </motion.h1>
+
+        {/* Gender */}
+        <div className="mb-5">
+          <label className="text-gray-600 text-sm font-medium">Gender</label>
+          <select
+            value={gender}
+            onChange={(e) => setGender(e.target.value)}
+            className="mt-2 w-full p-3 rounded-lg bg-white/80 focus:bg-white outline-none border border-transparent focus:border-indigo-500 transition"
+          >
+            <option value="">Select Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        {/* DOB */}
+        <div className="mb-8">
+          <label className="text-gray-600 text-sm font-medium">
+            Date of Birth
+          </label>
+          <input
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            className="mt-2 w-full p-3 rounded-lg bg-white/80 focus:bg-white outline-none border border-transparent focus:border-indigo-500 transition"
+          />
+        </div>
+
+        {/* Divider */}
+        <div className="flex items-center gap-3 mb-6">
+          <div className="flex-1 h-[1px] bg-gray-200/80"></div>
+          <span className="text-gray-600 text-sm">Continue with</span>
+          <div className="flex-1 h-[1px] bg-gray-200/80"></div>
+        </div>
+
+        {/* Google Button */}
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={logInHandler}
+          className="flex items-center justify-center gap-3 w-full p-3 bg-white rounded-xl shadow-lg font-semibold text-gray-700 hover:shadow-xl transition"
+        >
+          <FcGoogle size={24} />
+          Sign in with Google
+        </motion.button>
+
+        {/* Footer */}
+        <p className="text-center text-gray-600 text-sm mt-6">
+          Secure login powered by Google
+        </p>
+      </motion.main>
+    </div>
   );
 };
 
