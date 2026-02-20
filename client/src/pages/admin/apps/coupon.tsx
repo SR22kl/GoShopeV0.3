@@ -4,52 +4,21 @@ import axios from "axios";
 import { RootState, server } from "../../../redux/store";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
-
-// const allLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-// const allNumbers = "1234567890";
-// const allSymbols = "!@#$%^&*()_+";
+import { motion } from "framer-motion";
 
 const Coupon = () => {
   const [size, setSize] = useState<number>(8);
   const [amount, setAmount] = useState<number>(0);
   const [code, setCode] = useState<string>("");
   const [isCopied, setIsCopied] = useState<boolean>(false);
-
-  // const [includeNumbers, setIncludeNumbers] = useState<boolean>(false);
-  // const [includeCharacters, setIncludeCharacters] = useState<boolean>(false);
-  // const [includeSymbols, setIncludeSymbols] = useState<boolean>(false);
-
   const [coupon, setCoupon] = useState<string>("");
+
+  const { user } = useSelector((state: RootState) => state.userReducer);
 
   const copyText = async (coupon: string) => {
     await window.navigator.clipboard.writeText(coupon);
     setIsCopied(true);
   };
-
-  const { user } = useSelector((state: RootState) => state.userReducer);
-
-  // const submitHandler = (e: FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-
-  //   if (!includeNumbers && !includeCharacters && !includeSymbols)
-  //     return alert("Please Select One At Least");
-
-  //   let result: string = prefix || "";
-  //   const loopLength: number = size - result.length;
-
-  //   for (let i = 0; i < loopLength; i++) {
-  //     let entireString: string = "";
-  //     if (includeCharacters) entireString += allLetters;
-  //     if (includeNumbers) entireString += allNumbers;
-  //     if (includeSymbols) entireString += allSymbols;
-
-  //     const randomNum: number = ~~(Math.random() * entireString.length);
-  //     result += entireString[randomNum];
-
-  //   }
-
-  //   setCoupon(result);
-  // };
 
   const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -60,10 +29,9 @@ const Coupon = () => {
           code,
           amount,
         })
-        .then((res) => {
-          return res.data.coupon.code;
-        });
-      toast.success("coupon created successfully");
+        .then((res) => res.data.coupon.code);
+
+      toast.success("Coupon created successfully");
       setCoupon(newCoupon);
     } catch (error) {
       console.error("Coupon creation failed:", error);
@@ -78,28 +46,52 @@ const Coupon = () => {
   return (
     <div className="admin-container">
       <AdminSidebar />
-      <main className="dashboard-app-container">
-        <h1 className="text-[18px] md:text-[24px] font-semibold">Create Coupon</h1>
-        <section>
-          <form className="coupon-form" onSubmit={submitHandler}>
-            <div className="flex flex-col  p-1">
-              <label className="mb-1">Coupon Code</label>
+
+      <main className="p-4 sm:p-6 bg-gradient-to-br from-slate-50 to-slate-100 min-h-screen">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-6"
+        >
+          <h1 className="text-xl md:text-2xl font-semibold">
+            Create Coupon
+          </h1>
+          <p className="text-sm text-gray-500">
+            Generate discount coupons for customers
+          </p>
+        </motion.div>
+
+        <section className="max-w-xl">
+          <motion.form
+            onSubmit={submitHandler}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white rounded-xl shadow-md border border-gray-200 p-6 flex flex-col gap-5"
+          >
+            {/* Coupon Code */}
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium text-gray-700">
+                Coupon Code
+              </label>
               <input
-                className="border outline-0 h-[55px] p-4 rounded-md"
+                className="border border-gray-300 outline-none h-[50px] px-4 rounded-md focus:ring-2 focus:ring-indigo-400 transition"
                 type="text"
-                placeholder="Text to include"
+                placeholder="Enter coupon code"
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
                 maxLength={size}
               />
             </div>
 
-            <div className="flex flex-col  p-0.5">
-              <label className="mb-1">Code Length</label>
+            {/* Length */}
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium text-gray-700">
+                Code Length
+              </label>
               <input
-                className="border outline-0 h-[55px] p-4 rounded-md"
+                className="border border-gray-300 outline-none h-[50px] px-4 rounded-md focus:ring-2 focus:ring-indigo-400 transition"
                 type="number"
-                placeholder="Coupon Length"
                 value={size}
                 onChange={(e) => setSize(Number(e.target.value))}
                 min={8}
@@ -107,52 +99,49 @@ const Coupon = () => {
               />
             </div>
 
-            {/* <fieldset>
-              <legend>Include</legend>
-
+            {/* Amount */}
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium text-gray-700">
+                Discount Amount
+              </label>
               <input
-                type="checkbox"
-                checked={includeNumbers}
-                onChange={() => setIncludeNumbers((prev) => !prev)}
-              />
-              <span>Numbers</span>
-
-              <input
-                type="checkbox"
-                checked={includeCharacters}
-                onChange={() => setIncludeCharacters((prev) => !prev)}
-              />
-              <span>Characters</span>
-
-              <input
-                type="checkbox"
-                checked={includeSymbols}
-                onChange={() => setIncludeSymbols((prev) => !prev)}
-              />
-              <span>Symbols</span>
-            </fieldset> */}
-            <div className="flex flex-col  p-1">
-              <label className="mb-1">Amount</label>
-              <input
-                className="border outline-0 h-[55px] p-4 rounded-md"
+                className="border border-gray-300 outline-none h-[50px] px-4 rounded-md focus:ring-2 focus:ring-indigo-400 transition"
                 type="number"
-                placeholder="Add Coupon Amount"
+                placeholder="Enter discount"
                 value={amount}
                 onChange={(e) => setAmount(Number(e.target.value))}
                 min={100}
                 max={1000}
               />
             </div>
-            <button type="submit">Generate</button>
-          </form>
 
+            {/* Submit */}
+            <button
+              type="submit"
+              className="h-[50px] bg-indigo-600 text-white rounded-md font-medium hover:bg-indigo-700 transition active:scale-[0.98]"
+            >
+              Generate Coupon
+            </button>
+          </motion.form>
+
+          {/* Result */}
           {coupon && (
-            <code>
-              {coupon}{" "}
-              <span onClick={() => copyText(coupon)}>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mt-6 bg-white border border-gray-200 shadow-md rounded-xl p-4 flex items-center justify-between"
+            >
+              <code className="font-semibold text-indigo-600 text-lg">
+                {coupon}
+              </code>
+
+              <button
+                onClick={() => copyText(coupon)}
+                className="px-3 py-1.5 bg-indigo-50 text-indigo-600 rounded-md hover:bg-indigo-600 hover:text-white transition"
+              >
                 {isCopied ? "Copied" : "Copy"}
-              </span>{" "}
-            </code>
+              </button>
+            </motion.div>
           )}
         </section>
       </main>

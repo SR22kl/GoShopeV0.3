@@ -10,6 +10,7 @@ import { CustomError } from "../../types/apiTypes";
 import { useSelector } from "react-redux";
 import { UserReducerInitialState } from "../../types/reducerTypes";
 import { Skeleton } from "../../components/Loader";
+import { motion } from "framer-motion";
 
 interface DataType {
   photo: ReactElement;
@@ -20,26 +21,11 @@ interface DataType {
 }
 
 const columns: Column<DataType>[] = [
-  {
-    Header: "Photo",
-    accessor: "photo",
-  },
-  {
-    Header: "Name",
-    accessor: "name",
-  },
-  {
-    Header: "Price",
-    accessor: "price",
-  },
-  {
-    Header: "Stock",
-    accessor: "stock",
-  },
-  {
-    Header: "Action",
-    accessor: "action",
-  },
+  { Header: "Photo", accessor: "photo" },
+  { Header: "Name", accessor: "name" },
+  { Header: "Price", accessor: "price" },
+  { Header: "Stock", accessor: "stock" },
+  { Header: "Action", accessor: "action" },
 ];
 
 const Products = () => {
@@ -49,31 +35,47 @@ const Products = () => {
 
   const { data, isError, error, isLoading } = useAllProductsQuery(user?._id!);
 
-  if (isError) {
-    const err = error as CustomError;
-    toast.error(err.data.message);
-  }
   const [rows, setRows] = useState<DataType[]>([]);
 
   useEffect(() => {
-    if (data)
-      setRows(
-        data.products.map((i) => ({
-          key: i._id,
-          photo: <img src={`${i.photos[0]?.url}`} alt="Shoes" />,
-          name: i.name,
-          price: i.price,
-          stock: i.stock,
-          action: <Link to={`/admin/product/${i._id}`}>Manage</Link>,
-        }))
-      );
+    if (isError) {
+      const err = error as CustomError;
+      toast.error(err.data.message);
+    }
+  }, [isError, error]);
+
+  useEffect(() => {
+    if (!data?.products) return;
+
+    const updatedRows: DataType[] = data.products.map((i) => ({
+      photo: (
+        <img
+          src={`${i.photos[0]?.url}`}
+          alt={i.name}
+          className="w-12 h-12 object-cover rounded-md"
+        />
+      ),
+      name: i.name,
+      price: i.price,
+      stock: i.stock,
+      action: (
+        <Link
+          to={`/admin/product/${i._id}`}
+          className="px-3 py-1.5 rounded-md bg-indigo-50 text-indigo-600 hover:bg-indigo-600 hover:text-white transition"
+        >
+          Manage
+        </Link>
+      ),
+    }));
+
+    setRows(updatedRows);
   }, [data]);
 
   const Table = TableHOC<DataType>(
     columns,
     rows,
-    "dashboard-product-box",
-    "Products",
+    "bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden",
+    "",
     rows.length > 6
   )();
 
@@ -81,19 +83,40 @@ const Products = () => {
     <div className="admin-container">
       <AdminSidebar />
 
-      <main>
+      <main className="p-4 sm:p-6 bg-gradient-to-br from-slate-50 to-slate-100 min-h-screen">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex justify-between items-center mb-6"
+        >
+          <h1 className="text-2xl font-bold">Products</h1>
+          <span className="text-sm text-gray-500">{rows.length} Items</span>
+        </motion.div>
+
         {isLoading ? (
           <Skeleton
             length={10}
-            flex="flex flex-col gap-2 mt-4"
-            className="skeleton w-full h-[3rem] "
+            flex="flex flex-col gap-2"
+            className="w-full h-[3rem]"
           />
         ) : (
-          Table
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="rounded-xl overflow-hidden"
+          >
+            {Table}
+          </motion.div>
         )}
       </main>
-      <Link to="/admin/product/new" className="create-product-btn">
-        <FaPlus className="duration-300 ease-in-out hover:rotate-180" />
+
+      {/* Floating Add Button */}
+      <Link
+        to="/admin/product/new"
+        className="fixed bottom-5 right-5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg transition hover:scale-110"
+      >
+        <FaPlus className="duration-300 hover:rotate-180" />
       </Link>
     </div>
   );
