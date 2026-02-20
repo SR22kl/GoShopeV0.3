@@ -1,9 +1,8 @@
 import { useParams } from "react-router-dom";
+import { motion } from "framer-motion";
 import { useOrderDetailsQuery } from "../redux/api/orderApi";
 import { CustomError } from "../types/apiTypes";
 import toast from "react-hot-toast";
-import { Skeleton } from "../components/Loader";
-import { server } from "../redux/store";
 
 const OrderDetails = () => {
   const { id } = useParams();
@@ -17,160 +16,179 @@ const OrderDetails = () => {
 
   const order = data?.order!;
 
-  console.log(order);
-
   const getStatusBadgeClass = (status: string) => {
     switch (status) {
       case "Shipped":
-        return "bg-green-500";
+        return "bg-green-100 text-green-700";
       case "Processing":
-        return "bg-yellow-500";
+        return "bg-yellow-100 text-yellow-700";
       case "Delivered":
-        return "bg-blue-500";
+        return "bg-blue-100 text-blue-700";
       default:
-        "Shipped";
-        return "";
+        return "bg-gray-100 text-gray-700";
     }
   };
 
   return (
-    <div className="flex flex-col items-center p-4 bg-gray-100 min-h-screen">
+    <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-indigo-200 p-6">
       {isLoading ? (
-        <Skeleton
-          className="skeleton w-full h-[35rem] rounded-lg "
-          flex="flex flex-row gap-3 p-12 justify-center items-center "
-          length={1}
-        />
+        <div className="grid md:grid-cols-2 gap-6 animate-pulse">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div
+              key={i}
+              className="h-48 rounded-2xl bg-gray-200"
+            />
+          ))}
+        </div>
       ) : order ? (
         <>
-          <h1 className="text-3xl font-semibold text-center mb-8 text-gray-800">
-            Order Details
-          </h1>
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex justify-between items-center mb-6"
+          >
+            <h1 className="text-3xl font-bold tracking-tight">
+              Order Details
+            </h1>
+            <span
+              className={`px-4 py-1 rounded-full text-sm font-semibold ${getStatusBadgeClass(
+                order.status
+              )}`}
+            >
+              {order.status}
+            </span>
+          </motion.div>
 
-          <div className="flex flex-col w-full md:w-[50rem] p-4 bg-blue-100 rounded-md shadow-lg">
-            <div className="bg-white rounded-lg shadow p-6 mb-6">
-              <h2 className="text-xl font-semibold mb-4 border-b pb-2 text-gray-700">
-                Shipping Information
-              </h2>
-              <div className="flex justify-between mb-2">
-                <strong className="text-gray-600">Address:</strong>{" "}
-                <span>{order.shippingInfo.address}</span>
-              </div>
-              <div className="flex justify-between mb-2">
-                <strong className="text-gray-600">City:</strong>{" "}
-                <span>{order.shippingInfo.city}</span>
-              </div>
-              <div className="flex justify-between mb-2">
-                <strong className="text-gray-600">State:</strong>{" "}
-                <span>{order.shippingInfo.state}</span>
-              </div>
-              <div className="flex justify-between mb-2">
-                <strong className="text-gray-600">Country:</strong>{" "}
-                <span>{order.shippingInfo.country}</span>
-              </div>
-              <div className="flex justify-between mb-2">
-                <strong className="text-gray-600">PIN Code:</strong>{" "}
-                <span>{order.shippingInfo.pinCode}</span>
-              </div>
-            </div>
+          <div className="grid lg:grid-cols-3 gap-6">
+            {/* Left */}
+            <motion.div
+              initial={{ opacity: 0, x: -40 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="lg:col-span-2 flex flex-col gap-6"
+            >
+              {/* Shipping */}
+              <div className="bg-white rounded-2xl shadow-sm p-6">
+                <h2 className="font-semibold text-lg mb-4">
+                  Shipping Information
+                </h2>
 
-            <div className="bg-white rounded-lg shadow p-6 mb-6">
-              <h2 className="text-xl font-semibold mb-4 border-b pb-2 text-gray-700">
-                Order Information
-              </h2>
-              <div className="flex justify-between mb-2">
-                <strong className="text-gray-600">Order ID:</strong>{" "}
-                <span>{order._id}</span>
+                <div className="grid md:grid-cols-2 gap-3 text-sm">
+                  <p>
+                    <strong>Address:</strong> {order.shippingInfo.address}
+                  </p>
+                  <p>
+                    <strong>City:</strong> {order.shippingInfo.city}
+                  </p>
+                  <p>
+                    <strong>State:</strong> {order.shippingInfo.state}
+                  </p>
+                  <p>
+                    <strong>Country:</strong> {order.shippingInfo.country}
+                  </p>
+                  <p>
+                    <strong>PIN:</strong> {order.shippingInfo.pinCode}
+                  </p>
+                </div>
               </div>
-              <div className="flex justify-between mb-2">
-                <strong className="text-gray-600">Customer Name:</strong>{" "}
-                <span>{order.user.name}</span>
-              </div>
-              <div className="flex justify-between mb-2">
-                <strong className="text-gray-600">Order Status:</strong>{" "}
-                <span
-                  className={`text-white px-3 py-1 rounded-full text-sm ${getStatusBadgeClass(
-                    order.status
-                  )}`}
-                >
-                  {order.status}
-                </span>
-              </div>
-              <div className="flex justify-between mb-2">
-                <strong className="text-gray-600">Order Date:</strong>{" "}
-                <span>
-                  {new Date(order.createdAt!).toLocaleDateString() || ""}
-                </span>
-              </div>
-              <div className="flex justify-between mb-2">
-                <strong className="text-gray-600">Last Updated:</strong>{" "}
-                <span>
-                  {new Date(order.updatedAt!).toLocaleDateString() || ""}
-                </span>
-              </div>
-            </div>
 
-            <div className="bg-white rounded-lg shadow p-6 mb-6">
-              <h2 className="text-xl font-semibold mb-4 border-b pb-2 text-gray-700">
-                Order Items
-              </h2>
-              <ul className="space-y-4">
-                {order.orderItems.map((item) => (
-                  <li
-                    key={item._id}
-                    className="flex items-center border-b pb-4"
-                  >
-                    <img
-                      src={`${server}/${item.photo}`}
-                      alt={item.name}
-                      className="w-20 h-20 object-contain mr-4 rounded-md"
-                    />
-                    <div className="flex-grow">
-                      <strong className="block text-gray-700">
-                        {item.name}
-                      </strong>
-                      <span className="text-gray-600">
-                        Quantity: {item.quantity}
-                      </span>
-                      <span className="text-gray-600">
-                        Price: ₹{item.price}
-                      </span>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
+              {/* Items */}
+              <div className="bg-white rounded-2xl shadow-sm p-6">
+                <h2 className="font-semibold text-lg mb-4">Items</h2>
 
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-xl font-semibold mb-4 border-b pb-2 text-gray-700">
-                Order Summary
-              </h2>
-              <div className="text-right">
-                <p className="mb-1">
-                  <strong className="text-gray-600">Subtotal:</strong> ₹
-                  {order.subtotal}
-                </p>
-                <p className="mb-1">
-                  <strong className="text-gray-600">Tax:</strong> ₹{order.tax}
-                </p>
-                <p className="mb-1">
-                  <strong className="text-gray-600">Shipping Charges:</strong> ₹
-                  {order.shippingCharges}
-                </p>
-                <p className="mb-1">
-                  <strong className="text-gray-600">Discount:</strong> ₹
-                  {order.discount}
-                </p>
-                <p className="text-lg font-semibold">
-                  <strong className="text-gray-600">Total:</strong> ₹
-                  {order.total}
-                </p>
+                <div className="flex flex-col gap-4">
+                  {order.orderItems.map((item, i) => (
+                    <motion.div
+                      key={item._id}
+                      initial={{ opacity: 0, y: 30 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.05 }}
+                      className="flex gap-4 items-center border rounded-xl p-3 hover:shadow-md transition"
+                    >
+                      <img
+                        src={`${item.photo}`}
+                        alt={item.name}
+                        className="w-20 h-20 object-contain rounded-lg bg-gray-50"
+                      />
+
+                      <div className="flex flex-col flex-1">
+                        <p className="font-medium">{item.name}</p>
+                        <p className="text-sm text-gray-500">
+                          Qty: {item.quantity}
+                        </p>
+                      </div>
+
+                      <p className="font-semibold">₹{item.price}</p>
+                    </motion.div>
+                  ))}
+                </div>
               </div>
-            </div>
+            </motion.div>
+
+            {/* Right */}
+            <motion.div
+              initial={{ opacity: 0, x: 40 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="flex flex-col gap-6"
+            >
+              {/* Order Info */}
+              <div className="bg-white rounded-2xl shadow-sm p-6">
+                <h2 className="font-semibold text-lg mb-4">Order Info</h2>
+
+                <div className="text-sm flex flex-col gap-2">
+                  <p>
+                    <strong>ID:</strong> {order._id}
+                  </p>
+                  <p>
+                    <strong>Name:</strong> {order.user.name}
+                  </p>
+                  <p>
+                    <strong>Date:</strong>{" "}
+                    {new Date(order.createdAt!).toLocaleDateString()}
+                  </p>
+                  <p>
+                    <strong>Updated:</strong>{" "}
+                    {new Date(order.updatedAt!).toLocaleDateString()}
+                  </p>
+                </div>
+              </div>
+
+              {/* Summary */}
+              <div className="bg-white rounded-2xl shadow-sm p-6">
+                <h2 className="font-semibold text-lg mb-4">Summary</h2>
+
+                <div className="flex flex-col gap-2 text-sm">
+                  <div className="flex justify-between">
+                    <span>Subtotal</span>
+                    <span>₹{order.subtotal}</span>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <span>Tax</span>
+                    <span>₹{order.tax}</span>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <span>Shipping</span>
+                    <span>₹{order.shippingCharges}</span>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <span>Discount</span>
+                    <span>₹{order.discount}</span>
+                  </div>
+
+                  <div className="flex justify-between font-semibold text-base mt-2 border-t pt-2">
+                    <span>Total</span>
+                    <span>₹{order.total}</span>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
           </div>
         </>
       ) : (
-        <p>Order not found.</p>
+        <p>Order not found</p>
       )}
     </div>
   );
