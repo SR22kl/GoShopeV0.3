@@ -207,31 +207,43 @@ const Footer = () => {
         </motion.div>
 
         {/* Bottom */}
-        <div className="h-[1px] bg-gradient-to-r from-transparent via-indigo-500 to-transparent opacity-40 my-10"></div>
+        <div className="h-[1px] bg-gradient-to-r from-transparent via-indigo-500 to-transparent opacity-40 my-8"></div>
 
         <motion.div
           variants={containerVariants}
-          className="flex flex-col md:flex-row justify-between items-center gap-4"
+          className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-center md:text-left"
         >
-          <motion.div variants={itemVariants}>
+          {/* Brand */}
+          <motion.div
+            variants={itemVariants}
+            className="flex flex-col items-center md:items-start"
+          >
             <h3 className="font-bold text-xl bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
               GoShope
             </h3>
             <p className="text-gray-400 text-sm">Premium Fashion & Lifestyle</p>
           </motion.div>
 
-          <motion.p variants={itemVariants} className="text-gray-400 text-sm">
+          {/* Copyright */}
+          <motion.p
+            variants={itemVariants}
+            className="text-gray-400 text-sm order-3 md:order-none"
+          >
             © {currentYear} GoShope. All rights reserved.
           </motion.p>
 
-          <motion.div variants={itemVariants} className="flex gap-4 text-sm">
-            <a href="#" className="hover:text-white">
+          {/* Links */}
+          <motion.div
+            variants={itemVariants}
+            className="flex flex-wrap justify-center md:justify-end gap-5 text-sm"
+          >
+            <a href="#" className="hover:text-white transition">
               Privacy
             </a>
-            <a href="#" className="hover:text-white">
+            <a href="#" className="hover:text-white transition">
               Terms
             </a>
-            <a href="#" className="hover:text-white">
+            <a href="#" className="hover:text-white transition">
               Sitemap
             </a>
           </motion.div>
